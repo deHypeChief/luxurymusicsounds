@@ -127,10 +127,25 @@ export function FeatureVideo({
     setIsMuted(video.muted)
   }
 
+  /**
+   * The always-on variant plays silently, but only while it is on screen.
+   * Decoding video nobody is looking at is the quickest way to flatten a
+   * phone battery, and it costs bandwidth that was never asked for.
+   */
   useEffect(() => {
     const video = videoRef.current
     if (!video || !autoPlay) return
-    video.play().catch(() => undefined)
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => undefined)
+        else video.pause()
+      },
+      { threshold: 0.25 },
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
   }, [autoPlay])
 
   /**

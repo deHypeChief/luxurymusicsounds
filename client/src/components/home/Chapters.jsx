@@ -15,6 +15,10 @@ const CHAPTERS = [
   {
     eyebrow: 'Easystrings',
     image: '/media/easystrings/standing-wide.jpg',
+    // Phones get the clip instead. It was shot in portrait, which is the wrong
+    // shape for the wide desktop column but exactly right on a phone.
+    mobileVideo: '/media/luxury-music-sounds/full-house.mp4',
+    mobileVideoPoster: '/media/luxury-music-sounds/full-house.jpg',
     alt: 'Israel Peter playing violin in a room lined with hundreds of candles',
     heading: ['One violin, and a room built from', 'candlelight'],
     body: 'No amplification worth mentioning, and nothing between the bow and the back row. Every one of those candles is placed by hand before doors, because the light is part of the arrangement. This is what an Easystrings evening is: small, close, and lit so that the only thing competing with the music is the flicker.',
@@ -44,7 +48,7 @@ export default function Chapters() {
     <section className="border-t border-ink-line py-20 md:py-28">
       <div className="shell">
         <Reveal>
-          <Movement numeral="III" label="What an evening looks like" />
+          <Movement numeral="II" label="What an evening looks like" />
         </Reveal>
       </div>
 
@@ -63,11 +67,26 @@ export default function Chapters() {
                 className={chapter.flip ? 'lg:order-2' : ''}
               >
                 <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[3/2]">
+                  {chapter.mobileVideo ? (
+                    <video
+                      src={chapter.mobileVideo}
+                      poster={chapter.mobileVideoPoster}
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                      aria-label={chapter.alt}
+                      className="size-full object-cover lg:hidden"
+                    />
+                  ) : null}
+
                   <img
                     src={chapter.image}
                     alt={chapter.alt}
                     loading={index === 0 ? 'eager' : 'lazy'}
-                    className="size-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]"
+                    className={`size-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04] ${
+                      chapter.mobileVideo ? 'hidden lg:block' : ''
+                    }`}
                   />
                   <div className="scrim-soft pointer-events-none absolute inset-0 opacity-60" />
                 </div>

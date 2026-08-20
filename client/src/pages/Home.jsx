@@ -1,18 +1,16 @@
-import { ArrowRight, ArrowUpRight, CalendarX, Play, Ticket } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Ticket } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Dialog from '../components/Dialog'
-import EventCard from '../components/EventCard'
 import Reveal from '../components/Reveal'
-import { EmptyState } from '../components/States'
 import TicketDialog from '../components/TicketDialog'
 import { Movement, Script } from '../components/Typography'
+import { headlineEvent } from '../content/events'
 import Chapters from '../components/home/Chapters'
 import Hero from '../components/home/Hero'
+import MediaMarquee from '../components/home/MediaMarquee'
 import HeadlineEvent, { HeadlinePromo } from '../components/home/HeadlineEvent'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { headlineEvent, publishedEvents } from '../content/events'
-import { featuredGallery } from '../content/gallery'
 import { BRAND_PROFILES, FOUNDER, socialsFor } from '../content/site'
 import { ACCENT_CLASSES } from '../lib/format'
 
@@ -28,7 +26,6 @@ export default function Home() {
   // Everything the page needs is in the repo, so there is nothing to load and
   // no loading state to design around.
   const headline = headlineEvent()
-  const upcoming = publishedEvents({ scope: 'upcoming' })
 
   // The special-event dialog opens once per browser session, after a short
   // pause. Interrupting someone the instant the page paints reads as a popup
@@ -51,64 +48,11 @@ export default function Home() {
     setBuying(headline)
   }
 
-  // Everything on sale, minus the headline that already has its own section.
-  const onSale = upcoming.filter(
-    (event) => event.ticketsOnSale && event.id !== headline?.id,
-  )
-
   return (
     <>
       <Hero event={headline} onBuy={setBuying} />
 
       <HeadlineEvent event={headline} onBuy={setBuying} />
-
-      {/* ---- Tickets on sale ------------------------------------------- */}
-      <section className="border-t border-ink-line py-20 md:py-28">
-        <div className="shell">
-          <Reveal>
-            <Movement numeral="II" label="On sale now" />
-          </Reveal>
-
-          <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
-            <h2 className="u-display max-w-2xl text-[length:var(--text-display)]">
-              Tickets you can <Script xl>buy</Script> tonight
-            </h2>
-            <Link
-              to="/events"
-              className="group flex items-center gap-2 text-ivory-dim transition-colors hover:text-gold-lift"
-            >
-              <span className="u-meta">All events</span>
-              <ArrowRight
-                size={15}
-                strokeWidth={1.5}
-                className="transition-transform duration-500 group-hover:translate-x-1"
-              />
-            </Link>
-          </Reveal>
-
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {onSale.length > 0 ? (
-              onSale.slice(0, 6).map((event, index) => (
-                <Reveal key={event.id} delay={index * 0.06} className="h-full">
-                  <EventCard event={event} onBuy={setBuying} priority={index < 3} />
-                </Reveal>
-              ))
-            ) : (
-              <EmptyState
-                className="sm:col-span-2 lg:col-span-3"
-                icon={CalendarX}
-                title="Nothing on sale right now"
-                description="The next season is being confirmed. Follow along and you will hear first."
-                action={
-                  <Link to="/events" className="btn btn-gold btn-sm">
-                    Browse past events
-                  </Link>
-                }
-              />
-            )}
-          </div>
-        </div>
-      </section>
 
       <Chapters />
 
@@ -116,7 +60,7 @@ export default function Home() {
       <section className="border-t border-ink-line wash-velvet py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="IV" label="The house" />
+            <Movement numeral="III" label="The house" />
           </Reveal>
 
           <Reveal delay={0.08}>
@@ -169,7 +113,7 @@ export default function Home() {
       <section className="border-t border-ink-line py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="V" label="From the floor" />
+            <Movement numeral="IV" label="From the floor" />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
@@ -190,40 +134,8 @@ export default function Home() {
           </Reveal>
         </div>
 
-        {/* Deliberately breaks the shell: the strip runs off the right edge to
-            suggest there is more of it than the screen can hold. */}
-        <Reveal delay={0.12} className="no-scrollbar mt-12 overflow-x-auto">
-          <div className="flex w-max gap-4 pl-6 pr-6 md:pl-12 xl:pl-18">
-            {featuredGallery.map((item) => (
-              <Link
-                key={item.id}
-                to="/gallery"
-                className="group relative block h-64 w-52 shrink-0 overflow-hidden md:h-80 md:w-64"
-              >
-                {/* A video item's `image` is the clip itself, so a tile must
-                    show its poster still or the img simply fails to load. */}
-                <img
-                  src={item.mediaType === 'video' ? item.poster || '' : item.image}
-                  alt={item.title || ''}
-                  loading="lazy"
-                  className="size-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
-                />
-
-                {item.mediaType === 'video' ? (
-                  <span className="pointer-events-none absolute inset-0 grid place-items-center">
-                    <span className="grid size-11 place-items-center rounded-full border border-ivory/30 bg-ink/55 text-ivory backdrop-blur-sm transition-transform duration-500 group-hover:scale-110">
-                      <Play size={15} strokeWidth={1.5} className="ml-0.5" fill="currentColor" />
-                    </span>
-                  </span>
-                ) : null}
-
-                <div className="scrim-soft absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                <p className="absolute bottom-4 left-4 right-4 translate-y-2 font-display text-lg leading-tight text-ivory opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  {item.title}
-                </p>
-              </Link>
-            ))}
-          </div>
+        <Reveal delay={0.12} className="mt-12">
+          <MediaMarquee />
         </Reveal>
       </section>
 
@@ -237,7 +149,7 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <Movement numeral="VI" label="The founder" />
+            <Movement numeral="V" label="The founder" />
 
             <h2 className="u-display mt-8 text-[length:var(--text-display)]">
               It started with one <Script xl>violin</Script>

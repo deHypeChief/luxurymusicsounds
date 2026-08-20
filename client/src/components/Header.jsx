@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Home, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useScrollLock } from '../hooks/useUi'
@@ -19,6 +19,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useScrollLock(isMenuOpen)
 
@@ -49,9 +50,23 @@ export default function Header() {
         }`}
       >
         <div className="shell flex h-20 items-center justify-between gap-6">
-          <Link to="/" aria-label="Luxury Music Sounds, home">
-            <Wordmark />
-          </Link>
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Deeper pages get an explicit way back. The wordmark links home
+                too, but that is not obvious to everyone. */}
+            {!isHome ? (
+              <Link
+                to="/"
+                aria-label="Home"
+                className="grid size-9 shrink-0 place-items-center rounded-full border border-ink-line text-ivory-dim transition hover:border-gold-deep hover:text-gold-lift"
+              >
+                <Home size={15} strokeWidth={1.5} />
+              </Link>
+            ) : null}
+
+            <Link to="/" aria-label="Luxury Music Sounds, home">
+              <Wordmark />
+            </Link>
+          </div>
 
           <nav className="hidden items-center gap-9 md:flex" aria-label="Main">
             {NAV_LINKS.map((link) => (

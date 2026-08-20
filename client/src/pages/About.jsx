@@ -2,22 +2,17 @@ import { ArrowUpRight, Mail, Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/Reveal'
 import { Movement, Script } from '../components/Typography'
-import { FeatureVideo } from '../components/VideoPlayer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { ACCENT_CLASSES } from '../lib/format'
-import { BRAND_MEDIA, BRAND_PROFILES, CONTACT, FOUNDER, socialsFor } from '../content/site'
+import { BRAND_PROFILES, CONTACT, FOUNDER, socialsFor } from '../content/site'
 
-const HERO_IMAGE = '/media/four-seasons/ensemble-on-stage.jpg'
-
-/** A wide frame behind the portrait showreel, so the band fills the page. */
-const SHOWREEL_BACKDROP = '/media/four-seasons/audience-full-house.jpg'
+// Deliberately not the home page hero, which uses ensemble-on-stage.jpg.
+const HERO_IMAGE = '/media/four-seasons/quintet-candlelight.jpg'
 
 export default function About() {
   useDocumentTitle('About')
 
   const contact = CONTACT
-
-  const hasShowreel = Boolean(BRAND_MEDIA.showreel)
 
   return (
     <>
@@ -31,6 +26,16 @@ export default function About() {
             <h1 className="u-display mt-5 max-w-4xl text-[length:var(--text-hero)]">
               We build the <Script xl>silence</Script> too
             </h1>
+
+            <div className="mt-9 flex flex-wrap gap-3">
+              <a href="#enquiries" className="btn btn-buy">
+                <Mail size={15} strokeWidth={1.5} />
+                Make an enquiry
+              </a>
+              <Link to="/events" className="btn btn-ghost">
+                See what is on
+              </Link>
+            </div>
           </Reveal>
         </div>
       </header>
@@ -108,55 +113,10 @@ export default function About() {
         </div>
       </section>
 
-      {/*
-        Showreel. The clip was filmed on a phone in portrait, so it sits beside
-        the copy rather than alone in the middle of a wide section, where it
-        left more empty space than film. A wide still fills the band behind it
-        so the section reads at full width either way.
-      */}
-      {hasShowreel ? (
-        <section className="relative overflow-hidden border-y border-ink-line py-20 md:py-28">
-          <img
-            src={SHOWREEL_BACKDROP}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 size-full object-cover opacity-25"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/92 to-ink/60" />
-
-          <div className="shell relative">
-            <Reveal>
-              <Movement numeral="III" label="The showreel" />
-            </Reveal>
-
-            <div className="mt-12 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-              <Reveal delay={0.08}>
-                <h2 className="u-display text-[length:var(--text-display)]">
-                  Rather than describe it, <Script xl>listen</Script>
-                </h2>
-                <p className="mt-6 max-w-lg text-lg leading-relaxed text-ivory-dim">
-                  {BRAND_MEDIA.showreelCaption}
-                </p>
-                <p className="u-meta mt-6 text-[0.625rem]">Sound on</p>
-              </Reveal>
-
-              <Reveal delay={0.14}>
-                <FeatureVideo
-                  src={BRAND_MEDIA.showreel}
-                  poster={BRAND_MEDIA.showreelPoster}
-                  title={BRAND_MEDIA.showreelTitle}
-                  className="mx-auto aspect-[9/16] w-full max-w-xs border border-ink-line sm:max-w-sm"
-                />
-              </Reveal>
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       {/* The three acts */}
       <section className="shell py-20 md:py-28">
         <Reveal>
-          <Movement numeral={hasShowreel ? 'IV' : 'III'} label="The three acts" />
+          <Movement numeral="III" label="The three acts" />
         </Reveal>
 
         <Reveal delay={0.08}>
@@ -210,14 +170,10 @@ export default function About() {
       </section>
 
       {/* Enquiries */}
-      <section className="wash-royal py-20 md:py-28">
+      <section id="enquiries" className="wash-royal py-20 md:py-28">
         <div className="shell-narrow text-center">
           <Reveal>
-            <Movement
-              numeral={hasShowreel ? 'V' : 'IV'}
-              label="Enquiries"
-              className="justify-center"
-            />
+            <Movement numeral="IV" label="Enquiries" className="justify-center" />
 
             <h2 className="u-display mt-10 text-[length:var(--text-display)]">
               Tell us about the <Script xl>room</Script>

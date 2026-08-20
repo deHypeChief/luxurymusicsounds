@@ -177,6 +177,7 @@ export default function EventDetail() {
                 src={event.trailerVideo}
                 poster={event.trailerPoster}
                 title={event.title}
+                autoPlay
                 className="mt-6 aspect-[4/3] w-full bg-ink"
               />
             </Reveal>

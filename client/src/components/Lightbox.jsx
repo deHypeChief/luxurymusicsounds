@@ -62,11 +62,7 @@ export default function Lightbox({ items, index, onClose, onStep }) {
           aria-modal="true"
           aria-label={item.title || 'Gallery item'}
         >
-          <div className="flex items-center justify-between gap-4 border-b border-ink-line px-4 py-4 md:px-8">
-            <p className="u-meta tabular-nums">
-              {String(index + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
-            </p>
-
+          <div className="flex items-center justify-end gap-4 border-b border-ink-line px-4 py-4 md:px-8">
             <button
               ref={closeRef}
               type="button"
