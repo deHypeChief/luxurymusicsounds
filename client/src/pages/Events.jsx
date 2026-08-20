@@ -2,13 +2,12 @@ import { CalendarX } from 'lucide-react'
 import { useState } from 'react'
 import EventCard from '../components/EventCard'
 import Reveal from '../components/Reveal'
-import { EmptyState, ErrorState, SkeletonCard } from '../components/States'
+import { EmptyState } from '../components/States'
 import TicketDialog from '../components/TicketDialog'
 import { Script } from '../components/Typography'
-import { useApi } from '../hooks/useApi'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { publicApi } from '../lib/api'
-import { BRANDS } from '../lib/format'
+import { publishedEvents } from '../content/events'
+import { BRAND_ORDER } from '../content/site'
 
 const SCOPES = [
   { value: 'upcoming', label: 'Upcoming' },
@@ -22,12 +21,7 @@ export default function Events() {
   const [brand, setBrand] = useState('all')
   const [buying, setBuying] = useState(null)
 
-  const { data, error, isLoading, reload } = useApi(
-    () => publicApi.events({ scope, brand: brand === 'all' ? undefined : brand, limit: 48 }),
-    [scope, brand],
-  )
-
-  const events = data ?? []
+  const events = publishedEvents({ scope, brand })
 
   return (
     <>
@@ -67,7 +61,7 @@ export default function Events() {
           </div>
 
           <div className="no-scrollbar flex gap-2 overflow-x-auto" role="group" aria-label="Filter by act">
-            {['all', ...BRANDS].map((option) => (
+            {['all', ...BRAND_ORDER].map((option) => (
               <button
                 key={option}
                 type="button"
@@ -85,13 +79,9 @@ export default function Events() {
           </div>
         </Reveal>
 
-        {error ? (
-          <ErrorState error={error} onRetry={reload} />
-        ) : (
+        {(
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {isLoading ? (
-              [0, 1, 2, 3, 4, 5].map((key) => <SkeletonCard key={key} />)
-            ) : events.length > 0 ? (
+            {events.length > 0 ? (
               events.map((event, index) => (
                 <Reveal key={event.id} delay={Math.min(index, 5) * 0.05} className="h-full">
                   <EventCard event={event} onBuy={setBuying} priority={index < 3} />

@@ -4,9 +4,8 @@ import Reveal from '../components/Reveal'
 import { Movement, Script } from '../components/Typography'
 import { FeatureVideo } from '../components/VideoPlayer'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { useSiteSettings } from '../hooks/useSiteSettings'
 import { ACCENT_CLASSES } from '../lib/format'
-import { BRAND_MEDIA, BRAND_PROFILES, FOUNDER } from '../lib/site'
+import { BRAND_MEDIA, BRAND_PROFILES, CONTACT, FOUNDER, socialsFor } from '../content/site'
 
 const HERO_IMAGE = '/media/four-seasons/ensemble-on-stage.jpg'
 
@@ -16,10 +15,7 @@ const SHOWREEL_BACKDROP = '/media/four-seasons/audience-full-house.jpg'
 export default function About() {
   useDocumentTitle('About')
 
-  const settings = useSiteSettings()
-  const contact = settings?.contact
-  const socialsFor = (brand) =>
-    (settings?.socials ?? []).filter((social) => social.brand === brand)
+  const contact = CONTACT
 
   const hasShowreel = Boolean(BRAND_MEDIA.showreel)
 
@@ -194,7 +190,7 @@ export default function About() {
 
                 <ul className="flex flex-wrap gap-x-4 gap-y-2 md:justify-end">
                   {socials.map((social) => (
-                    <li key={social.id}>
+                    <li key={social.platform}>
                       <a
                         href={social.url}
                         target="_blank"

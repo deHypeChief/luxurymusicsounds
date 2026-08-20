@@ -1,6 +1,6 @@
 import { Play } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { usePrefersReducedMotion } from '../hooks/useApi'
+import { usePrefersReducedMotion } from '../hooks/useUi'
 
 /**
  * A perfect-fit tiling pattern.

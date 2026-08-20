@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { usePrefersReducedMotion } from '../hooks/useApi'
+import { usePrefersReducedMotion } from '../hooks/useUi'
 
 /**
  * Scroll-triggered reveal. Content rises into place once, the way a curtain

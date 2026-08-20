@@ -1,32 +1,20 @@
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
-import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useSiteSettings } from '../hooks/useSiteSettings'
-import { BRAND_ORDER, NAV_LINKS } from '../lib/site'
+import { BRAND_PROFILES, CONTACT, FOOTER, NAV_LINKS } from '../content/site'
 import { Wordmark } from './Header'
 import { Script } from './Typography'
 
 export default function Footer() {
-  const settings = useSiteSettings()
   const year = new Date().getFullYear()
-
-  const contact = settings?.contact
+  const contact = CONTACT
 
   /** Grouped by act, in the house's own order rather than alphabetically. */
-  const grouped = useMemo(() => {
-    const byBrand = new Map()
-    for (const social of settings?.socials ?? []) {
-      if (!byBrand.has(social.brand)) byBrand.set(social.brand, [])
-      byBrand.get(social.brand).push(social)
-    }
+  const grouped = BRAND_PROFILES.filter((brand) => brand.socials.length > 0).map((brand) => ({
+    brand: brand.name,
+    links: brand.socials,
+  }))
 
-    return BRAND_ORDER.filter((brand) => byBrand.has(brand)).map((brand) => ({
-      brand,
-      links: byBrand.get(brand),
-    }))
-  }, [settings])
-
-  const heading = settings?.footerHeading || 'Book the room'
+  const heading = FOOTER.heading
   const headingWords = heading.trim().split(' ')
   const headingLead = headingWords.slice(0, -1).join(' ')
   const headingTail = headingWords[headingWords.length - 1]
@@ -41,8 +29,8 @@ export default function Footer() {
               <Script xl>{headingTail}</Script>
             </h2>
 
-            {settings?.footerIntro ? (
-              <p className="mt-6 max-w-md text-ivory-dim">{settings.footerIntro}</p>
+            {FOOTER.intro ? (
+              <p className="mt-6 max-w-md text-ivory-dim">{FOOTER.intro}</p>
             ) : null}
 
             {contact ? (
@@ -89,7 +77,7 @@ export default function Footer() {
                 <h3 className="u-eyebrow mb-4">{group.brand}</h3>
                 <ul className="space-y-2">
                   {group.links.map((social) => (
-                    <li key={social.id}>
+                    <li key={social.platform}>
                       <a
                         href={social.url}
                         target="_blank"

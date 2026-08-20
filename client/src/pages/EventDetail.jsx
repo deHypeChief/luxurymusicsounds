@@ -2,40 +2,38 @@ import { ArrowLeft, Clock, MapPin, Ticket } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Reveal from '../components/Reveal'
-import { ErrorState, Spinner } from '../components/States'
 import TicketDialog from '../components/TicketDialog'
 import { Script } from '../components/Typography'
 import { FeatureVideo } from '../components/VideoPlayer'
-import { useApi } from '../hooks/useApi'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { publicApi } from '../lib/api'
+import { findEvent } from '../content/events'
 import { formatDate, formatPrice, formatTime } from '../lib/format'
 
 export default function EventDetail() {
   const { slug } = useParams()
   const [isBuying, setIsBuying] = useState(false)
 
-  const { data: event, error, isLoading, reload } = useApi(() => publicApi.event(slug), [slug])
+  const event = findEvent(slug)
 
   useDocumentTitle(event?.title ?? null)
 
-  if (isLoading) return <Spinner label="Loading event" className="min-h-[70vh]" />
-
-  if (error) {
+  if (!event) {
     return (
-      <div className="shell py-40">
-        <ErrorState error={error} onRetry={reload} />
-        <div className="mt-8 text-center">
-          <Link to="/events" className="btn btn-ghost btn-sm">
-            <ArrowLeft size={14} strokeWidth={1.5} />
-            All events
-          </Link>
-        </div>
+      <div className="shell py-40 text-center">
+        <p className="u-eyebrow">Not found</p>
+        <h1 className="u-display mt-4 text-[length:var(--text-display)]">No such evening</h1>
+        <p className="mx-auto mt-6 max-w-md text-ivory-dim">
+          That date is not in the diary. It may have passed, or the link may be wrong.
+        </p>
+        <Link to="/events" className="btn btn-ghost mt-8">
+          <ArrowLeft size={14} strokeWidth={1.5} />
+          All events
+        </Link>
       </div>
     )
   }
 
-  const canBuy = event.ticketsOnSale && !event.isSoldOut
+  const canBuy = event.ticketsOnSale
   const paragraphs = event.description.split('\n').filter(Boolean)
 
   return (
@@ -68,11 +66,6 @@ export default function EventDetail() {
             {event.isHeadline ? (
               <span className="bg-velvet px-3 py-1 font-sans text-[0.5625rem] font-medium uppercase tracking-[0.24em] text-ivory">
                 Special event
-              </span>
-            ) : null}
-            {event.isSoldOut ? (
-              <span className="border border-ivory/25 px-3 py-1 font-sans text-[0.5625rem] font-medium uppercase tracking-[0.24em] text-ivory-dim">
-                Sold out
               </span>
             ) : null}
           </div>
@@ -241,7 +234,7 @@ export default function EventDetail() {
             ) : (
               <>
                 <p className="mt-4 font-display text-4xl font-bold">
-                  {event.isSoldOut ? 'Sold out' : `From ${formatPrice(event.lowestPrice)}`}
+                  From {formatPrice(event.lowestPrice)}
                 </p>
 
                 <ul className="mt-7 space-y-3 border-t border-ink-line pt-6">
@@ -249,19 +242,8 @@ export default function EventDetail() {
                     <li key={tier.id} className="flex items-baseline justify-between gap-4">
                       <div className="min-w-0">
                         <p className="truncate text-sm text-ivory">{tier.name}</p>
-                        {tier.isSoldOut ? (
-                          <p className="u-meta text-[0.625rem] text-velvet-lift">Sold out</p>
-                        ) : tier.lowStock ? (
-                          <p className="u-meta text-[0.625rem] text-velvet-lift">
-                            {tier.remaining} left
-                          </p>
-                        ) : null}
                       </div>
-                      <p
-                        className={`shrink-0 font-display text-lg tabular-nums ${
-                          tier.isSoldOut ? 'text-ivory-faint line-through' : 'text-gold-lift'
-                        }`}
-                      >
+                      <p className="shrink-0 font-display text-lg tabular-nums text-gold-lift">
                         {formatPrice(tier.price)}
                       </p>
                     </li>
@@ -275,7 +257,7 @@ export default function EventDetail() {
                   onClick={() => setIsBuying(true)}
                 >
                   <Ticket size={15} strokeWidth={1.5} />
-                  {canBuy ? 'Buy tickets' : event.isSoldOut ? 'Sold out' : 'Not yet on sale'}
+                  {canBuy ? 'Buy tickets' : 'Not yet on sale'}
                 </button>
 
                 <p className="mt-4 text-center text-xs text-ivory-faint">

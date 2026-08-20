@@ -3,11 +3,10 @@ import { useMemo, useState } from 'react'
 import GalleryCanvas from '../components/GalleryCanvas'
 import Lightbox from '../components/Lightbox'
 import Reveal from '../components/Reveal'
-import { EmptyState, ErrorState, Spinner } from '../components/States'
+import { EmptyState } from '../components/States'
 import { Script } from '../components/Typography'
-import { useApi } from '../hooks/useApi'
+import { galleryItems } from '../content/gallery'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { publicApi } from '../lib/api'
 
 export default function GalleryPage() {
   useDocumentTitle('Gallery')
@@ -15,9 +14,7 @@ export default function GalleryPage() {
   const [category, setCategory] = useState('all')
   const [openIndex, setOpenIndex] = useState(null)
 
-  const { data, error, isLoading, reload } = useApi(() => publicApi.gallery({ limit: 200 }), [])
-
-  const items = useMemo(() => data?.items ?? [], [data])
+  const items = galleryItems
 
   const filters = useMemo(() => {
     const counts = new Map()
@@ -85,13 +82,7 @@ export default function GalleryPage() {
       </header>
 
       <div className="pb-16">
-        {isLoading ? (
-          <Spinner label="Loading the archive" />
-        ) : error ? (
-          <div className="shell">
-            <ErrorState error={error} onRetry={reload} />
-          </div>
-        ) : visible.length === 0 ? (
+        {visible.length === 0 ? (
           <div className="shell">
             <EmptyState
               icon={ImageOff}

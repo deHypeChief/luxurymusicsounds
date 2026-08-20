@@ -4,18 +4,17 @@ import { Link } from 'react-router-dom'
 import Dialog from '../components/Dialog'
 import EventCard from '../components/EventCard'
 import Reveal from '../components/Reveal'
-import { EmptyState, SkeletonCard } from '../components/States'
+import { EmptyState } from '../components/States'
 import TicketDialog from '../components/TicketDialog'
 import { Movement, Script } from '../components/Typography'
 import Chapters from '../components/home/Chapters'
 import Hero from '../components/home/Hero'
 import HeadlineEvent, { HeadlinePromo } from '../components/home/HeadlineEvent'
-import { useApi } from '../hooks/useApi'
-import { useSiteSettings } from '../hooks/useSiteSettings'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
-import { publicApi } from '../lib/api'
+import { headlineEvent, publishedEvents } from '../content/events'
+import { featuredGallery } from '../content/gallery'
+import { BRAND_PROFILES, FOUNDER, socialsFor } from '../content/site'
 import { ACCENT_CLASSES } from '../lib/format'
-import { BRAND_PROFILES, FOUNDER } from '../lib/site'
 
 const PROMO_SEEN_KEY = 'lms:special-event-seen'
 const PROMO_DELAY_MS = 3500
@@ -23,49 +22,45 @@ const PROMO_DELAY_MS = 3500
 export default function Home() {
   useDocumentTitle('Luxury Music Sounds')
 
-  const settings = useSiteSettings()
-
-  const headline = useApi(() => publicApi.headlineEvent(), [])
-  const events = useApi(() => publicApi.events({ scope: 'upcoming', limit: 6 }), [])
-  const gallery = useApi(() => publicApi.gallery({ featured: 'true', limit: 8 }), [])
-
   const [buying, setBuying] = useState(null)
   const [isPromoOpen, setIsPromoOpen] = useState(false)
 
-  const headlineEvent = headline.data
-  const upcoming = events.data ?? []
+  // Everything the page needs is in the repo, so there is nothing to load and
+  // no loading state to design around.
+  const headline = headlineEvent()
+  const upcoming = publishedEvents({ scope: 'upcoming' })
 
   // The special-event dialog opens once per browser session, after a short
   // pause. Interrupting someone the instant the page paints reads as a popup
   // ad; letting the hero land first makes it read as an invitation.
   useEffect(() => {
-    if (!headlineEvent?.showPopup || !headlineEvent.ticketsOnSale) return
-    if (sessionStorage.getItem(PROMO_SEEN_KEY) === headlineEvent.id) return
+    if (!headline?.showPopup || !headline.ticketsOnSale) return
+    if (sessionStorage.getItem(PROMO_SEEN_KEY) === headline.id) return
 
     const timer = setTimeout(() => setIsPromoOpen(true), PROMO_DELAY_MS)
     return () => clearTimeout(timer)
-  }, [headlineEvent])
+  }, [headline])
 
   const dismissPromo = () => {
     setIsPromoOpen(false)
-    if (headlineEvent) sessionStorage.setItem(PROMO_SEEN_KEY, headlineEvent.id)
+    if (headline) sessionStorage.setItem(PROMO_SEEN_KEY, headline.id)
   }
 
   const buyFromPromo = () => {
     dismissPromo()
-    setBuying(headlineEvent)
+    setBuying(headline)
   }
 
   // Everything on sale, minus the headline that already has its own section.
   const onSale = upcoming.filter(
-    (event) => event.ticketsOnSale && event.id !== headlineEvent?.id,
+    (event) => event.ticketsOnSale && event.id !== headline?.id,
   )
 
   return (
     <>
-      <Hero event={headlineEvent} onBuy={setBuying} />
+      <Hero event={headline} onBuy={setBuying} />
 
-      <HeadlineEvent event={headlineEvent} onBuy={setBuying} />
+      <HeadlineEvent event={headline} onBuy={setBuying} />
 
       {/* ---- Tickets on sale ------------------------------------------- */}
       <section className="border-t border-ink-line py-20 md:py-28">
@@ -92,9 +87,7 @@ export default function Home() {
           </Reveal>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {events.isLoading ? (
-              [0, 1, 2].map((key) => <SkeletonCard key={key} />)
-            ) : onSale.length > 0 ? (
+            {onSale.length > 0 ? (
               onSale.slice(0, 6).map((event, index) => (
                 <Reveal key={event.id} delay={index * 0.06} className="h-full">
                   <EventCard event={event} onBuy={setBuying} priority={index < 3} />
@@ -151,10 +144,8 @@ export default function Home() {
                   </p>
 
                   <ul className="mt-8 flex flex-wrap gap-x-4 gap-y-2">
-                    {(settings?.socials ?? [])
-                      .filter((social) => social.brand === brand.name)
-                      .map((social) => (
-                      <li key={social.id}>
+                    {socialsFor(brand.name).map((social) => (
+                      <li key={social.platform}>
                         <a
                           href={social.url}
                           target="_blank"
@@ -203,7 +194,7 @@ export default function Home() {
             suggest there is more of it than the screen can hold. */}
         <Reveal delay={0.12} className="no-scrollbar mt-12 overflow-x-auto">
           <div className="flex w-max gap-4 pl-6 pr-6 md:pl-12 xl:pl-18">
-            {(gallery.data?.items ?? []).map((item) => (
+            {featuredGallery.map((item) => (
               <Link
                 key={item.id}
                 to="/gallery"
@@ -300,11 +291,11 @@ export default function Home() {
       <Dialog
         open={isPromoOpen}
         onClose={dismissPromo}
-        label={headlineEvent ? `Special event: ${headlineEvent.title}` : 'Special event'}
+        label={headline ? `Special event: ${headline.title}` : 'Special event'}
         size="lg"
         className="overflow-hidden"
       >
-        <HeadlinePromo event={headlineEvent} onBuy={buyFromPromo} onDismiss={dismissPromo} />
+        <HeadlinePromo event={headline} onBuy={buyFromPromo} onDismiss={dismissPromo} />
       </Dialog>
     </>
   )

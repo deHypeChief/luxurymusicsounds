@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 import { useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { useEscapeKey, useScrollLock } from '../hooks/useApi'
+import { useEscapeKey, useScrollLock } from '../hooks/useUi'
 import { FeatureVideo } from './VideoPlayer'
 
 /**

@@ -1,20 +1,28 @@
 /**
- * Site-wide content that is not editable from the admin panel: brand media,
- * the three acts and their socials, the founder story, and contact details.
+ * Everything about the house that is not an event or a photograph.
+ *
+ * Contact details, social links, the founder story and the site-wide media all
+ * live here. Edit this file and redeploy; there is no admin panel and nothing
+ * is stored on a server.
  */
 
-/**
- * Site-wide media, as opposed to the per-event media managed in the admin
- * panel. These are the two pieces that belong to the brand rather than to any
- * one evening, so they live in code and change about once a year.
- *
- * Drop the files into client/public/media/brand/ using exactly these names and
- * they appear. Leave a value as '' and that section falls back gracefully:
- * the hero shows its still photograph, and the showreel section is hidden
- * entirely rather than rendering an empty player.
- *
- * See client/public/media/README.md for the encoding settings.
- */
+/* --- Contact -------------------------------------------------------------- */
+
+export const CONTACT = {
+  email: 'bookings@luxurymusicsounds.com',
+  phone: '+234 800 000 0000',
+  city: 'Lagos, Nigeria',
+}
+
+export const FOOTER = {
+  /** The last word is set in the gold script face, so put the emphasis there. */
+  heading: 'Book the room',
+  intro:
+    'Weddings, private dinners, corporate evenings and concert programmes across Lagos and beyond. Tell us the room and the date, and we will tell you what it should sound like.',
+}
+
+/* --- Site-wide media ------------------------------------------------------ */
+
 export const BRAND_MEDIA = {
   /**
    * The hero runs on a still. The client's clips are all phone video shot in
@@ -34,16 +42,23 @@ export const BRAND_MEDIA = {
     'Filmed at a Luxury Music Sounds evening. The best answer to what one of these nights actually sounds like.',
 }
 
-/** Display order for the three acts, used wherever they are listed together. */
+/* --- The three acts ------------------------------------------------------- */
+
+/** Display order wherever the acts are listed together. */
 export const BRAND_ORDER = ['Luxury Music Sounds', 'Easystrings', 'The Four Seasons']
 
 /**
- * The three acts.
+ * SOCIAL LINKS: please confirm each one resolves before launch.
  *
- * Names, roles and blurbs are editorial and live here. Social links do NOT:
- * they are edited in Admin > Settings, because they are the thing most likely
- * to change and the least likely to want a deploy.
+ * The brief gave display names rather than URLs. Where a platform uses
+ * unambiguous handles (Instagram, TikTok, Threads) the handle below is a best
+ * guess from that name. Where only a page name was given (both Facebook
+ * entries) the link runs a Facebook search for that name, which always
+ * resolves, rather than guessing a vanity URL that might 404.
  */
+const facebookSearch = (name) =>
+  `https://www.facebook.com/search/top?q=${encodeURIComponent(name)}`
+
 export const BRAND_PROFILES = [
   {
     id: 'luxury-music-sounds',
@@ -52,6 +67,9 @@ export const BRAND_PROFILES = [
     role: 'The house',
     blurb:
       'The parent house. Galas, corporate evenings and the season finale, with the roster playing together at full size.',
+    socials: [
+      { platform: 'Instagram', handle: '@luxurymusicsounds', url: 'https://instagram.com/luxurymusicsounds' },
+    ],
   },
   {
     id: 'easystrings',
@@ -60,6 +78,12 @@ export const BRAND_PROFILES = [
     role: 'Solo violin',
     blurb:
       'Israel Peter alone with a violin. Weddings, private dinners and the Velvet Sessions: fifty people, two sets, nothing amplified worth mentioning.',
+    socials: [
+      { platform: 'Instagram', handle: '@easystrings', url: 'https://instagram.com/easystrings' },
+      { platform: 'TikTok', handle: '@easystrings', url: 'https://tiktok.com/@easystrings' },
+      { platform: 'Threads', handle: '@easystrings', url: 'https://threads.net/@easystrings' },
+      { platform: 'Facebook', handle: 'Israel Peter', url: facebookSearch('Israel Peter') },
+    ],
   },
   {
     id: 'the-four-seasons',
@@ -68,14 +92,24 @@ export const BRAND_PROFILES = [
     role: 'String ensemble',
     blurb:
       'The ensemble. Vivaldi by candlelight, the Advent concert, and the concert-hall programmes the house is known for.',
+    socials: [
+      { platform: 'Instagram', handle: '@thefourseasons', url: 'https://instagram.com/thefourseasons' },
+      { platform: 'TikTok', handle: '@thefourseasons', url: 'https://tiktok.com/@thefourseasons' },
+      { platform: 'Facebook', handle: 'The Four Seasons', url: facebookSearch('The Four Seasons') },
+    ],
   },
 ]
+
+export const socialsFor = (brand) =>
+  BRAND_PROFILES.find((profile) => profile.name === brand)?.socials ?? []
+
+/* --- The founder ---------------------------------------------------------- */
 
 export const FOUNDER = {
   name: 'Israel Peter',
   role: 'Founder & Lead Violin',
   portrait: '/media/easystrings/portrait.jpg',
-  // PLACEHOLDER COPY, written to the right shape and length so the layout is
+  // PLACEHOLDER COPY: written to the right shape and length so the layout is
   // real, but every fact here needs replacing with Israel's own words.
   short:
     'Israel Peter started Easystrings with one violin and a diary of weddings. Luxury Music Sounds grew out of the evenings that diary could not hold.',
@@ -86,6 +120,8 @@ export const FOUNDER = {
   ],
   signature: 'Israel Peter',
 }
+
+/* --- Navigation ----------------------------------------------------------- */
 
 export const NAV_LINKS = [
   { label: 'Events', to: '/events' },

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { ArrowDown, Ticket } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { usePrefersReducedMotion } from '../../hooks/useApi'
+import { usePrefersReducedMotion } from '../../hooks/useUi'
 import { formatDate, formatTime } from '../../lib/format'
-import { BRAND_MEDIA } from '../../lib/site'
+import { BRAND_MEDIA } from '../../content/site'
 import { BackgroundVideo } from '../VideoPlayer'
 import { Script } from '../Typography'
 

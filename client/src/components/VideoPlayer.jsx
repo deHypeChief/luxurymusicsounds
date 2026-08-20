@@ -1,6 +1,6 @@
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { usePrefersReducedMotion } from '../hooks/useApi'
+import { usePrefersReducedMotion } from '../hooks/useUi'
 
 /** True when the browser says the connection is metered or slow. */
 function isFrugalConnection() {

@@ -11,7 +11,7 @@ import { ACCENT_CLASSES, formatDateParts, formatPrice, formatTime } from '../lib
 export default function EventCard({ event, onBuy, priority = false }) {
   const accent = ACCENT_CLASSES[event.accent] ?? ACCENT_CLASSES.gold
   const date = formatDateParts(event.startsAt)
-  const canBuy = event.ticketsOnSale && !event.isSoldOut
+  const canBuy = event.ticketsOnSale
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden border border-ink-line bg-ink-raised transition-colors duration-500 hover:border-gold-deep">
@@ -38,10 +38,6 @@ export default function EventCard({ event, onBuy, priority = false }) {
         {event.isHeadline ? (
           <p className="absolute right-4 top-4 bg-velvet px-3 py-1.5 font-sans text-[0.5625rem] font-medium uppercase tracking-[0.24em] text-ivory">
             Headline
-          </p>
-        ) : event.isSoldOut ? (
-          <p className="absolute right-4 top-4 border border-ivory/25 bg-ink/80 px-3 py-1.5 font-sans text-[0.5625rem] font-medium uppercase tracking-[0.24em] text-ivory-dim backdrop-blur-sm">
-            Sold out
           </p>
         ) : null}
       </Link>
@@ -82,14 +78,10 @@ export default function EventCard({ event, onBuy, priority = false }) {
         <div className="mt-auto flex items-end justify-between gap-4 border-t border-ink-line pt-5">
           <div>
             <p className="u-meta text-[0.625rem]">
-              {event.isPast ? 'Took place' : event.isSoldOut ? 'Status' : 'From'}
+              {event.isPast ? 'Took place' : 'From'}
             </p>
             <p className="mt-1 font-display text-xl font-semibold text-ivory">
-              {event.isPast
-                ? 'Archived'
-                : event.isSoldOut
-                  ? 'Sold out'
-                  : formatPrice(event.lowestPrice)}
+              {event.isPast ? 'Archived' : formatPrice(event.lowestPrice)}
             </p>
           </div>
 

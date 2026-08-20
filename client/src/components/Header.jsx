@@ -2,8 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { useScrollLock } from '../hooks/useApi'
-import { NAV_LINKS } from '../lib/site'
+import { useScrollLock } from '../hooks/useUi'
+import { NAV_LINKS } from '../content/site'
 
 /** The wordmark: script word plus display caps, same move as the headlines. */
 export function Wordmark({ className = '' }) {

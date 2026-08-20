@@ -45,7 +45,7 @@ export default function HeadlineEvent({ event, onBuy }) {
 
   if (!event) return null
 
-  const canBuy = event.ticketsOnSale && !event.isSoldOut
+  const canBuy = event.ticketsOnSale
 
   return (
     <section id="programme" className="relative overflow-hidden wash-royal py-20 md:py-28">
@@ -128,7 +128,7 @@ export default function HeadlineEvent({ event, onBuy }) {
                 </>
               ) : (
                 <p className="u-meta text-velvet-lift">
-                  {event.isSoldOut ? 'Sold out' : 'Tickets not yet on sale'}
+                  Tickets not yet on sale
                 </p>
               )}
 
