@@ -1,0 +1,20 @@
+{
+  "name": "luxurymusicsounds",
+  "private": true,
+  "description": "Luxury Music Sounds \u2014 website and ticketing platform",
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "dev:api": "bun --cwd=server run dev",
+    "dev:web": "bun --cwd=client run dev",
+    "stop": "bun scripts/stop.ts",
+    "build": "bun --cwd=client run build",
+    "preview": "bun --cwd=client run preview",
+    "start": "bun --cwd=server run start",
+    "seed": "bun --cwd=server run seed",
+    "seed:fresh": "bun --cwd=server run seed:fresh",
+    "lint": "bun --cwd=client run lint",
+    "typecheck": "bun --cwd=server run typecheck",
+    "check": "bun run lint && bun run build",
+    "setup": "bun --cwd=server install && bun --cwd=client install"
+  }
+}

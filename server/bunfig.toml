@@ -1,0 +1,3 @@
+# Loaded before every `bun` entrypoint in this package.
+# See src/bun-compat.ts for why this is needed.
+preload = ["./src/bun-compat.ts"]

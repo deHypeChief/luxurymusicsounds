@@ -1,0 +1,548 @@
+@import 'tailwindcss';
+
+/* ===========================================================================
+   Luxury Music Sounds design tokens
+
+   The palette is night-dominant: ink is the ground, ivory is punctuation.
+   Every colour carries one job, which is what keeps five strong colours from
+   fighting each other:
+
+     ink     the ground
+     ivory   type, and the single editorial "intermission" section
+     gold    connective tissue: hairlines, eyebrows, script accents, ornament
+     royal   atmosphere: gradient washes behind imagery, The Four Seasons
+     velvet  commerce only: buy actions, headline badge, on-sale, sold-out
+
+   Velvet never appears as decoration. If something is velvet, it is about a
+   ticket. That restraint is what makes it read as urgent when it does appear.
+   =========================================================================== */
+
+@theme {
+  --color-ink: #0a0a0c;
+  --color-ink-raised: #121216;
+  --color-ink-soft: #1a1a20;
+  --color-ink-line: #26262e;
+
+  --color-ivory: #efeae0;
+  --color-ivory-dim: #b9b3a7;
+  --color-ivory-faint: #7c776e;
+
+  --color-gold: #9c7a2b;
+  --color-gold-lift: #c9a24d;
+  --color-gold-deep: #6b5218;
+
+  --color-royal: #16225c;
+  --color-royal-lift: #2b3d8f;
+  --color-royal-deep: #0c1235;
+
+  --color-velvet: #7a1c2b;
+  --color-velvet-lift: #a52c3f;
+  --color-velvet-deep: #4d1019;
+
+  --font-display: 'Bodoni Moda', 'Didot', 'Times New Roman', serif;
+  --font-script: 'Pinyon Script', 'Snell Roundhand', cursive;
+  --font-sans: 'Jost', 'Futura', 'Helvetica Neue', sans-serif;
+
+  --text-hero: clamp(2.75rem, 9vw, 8.5rem);
+  --text-display: clamp(2.25rem, 6vw, 5rem);
+  --text-title: clamp(1.75rem, 3.6vw, 3rem);
+
+  --ease-curtain: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 0.95;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  /* One focus treatment everywhere, gold so it reads as part of the identity. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-lift);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-velvet);
+    color: var(--color-ivory);
+  }
+
+  /* A thin gold scrollbar keeps the chrome in the palette on desktop. */
+  @supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-gold-deep);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-gold);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===========================================================================
+   Typographic signature
+
+   The one bold move on this site: display headlines set in Bodoni caps with a
+   single word dropped in oversized gold script that overlaps the cap line.
+   Everything else stays quiet so this stays the memorable thing.
+   =========================================================================== */
+
+@layer components {
+  .u-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  .u-script {
+    font-family: var(--font-script);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--color-gold-lift);
+    /* Script faces sit high on the baseline; nudge it back into the cap line. */
+    display: inline-block;
+    transform: translateY(0.08em);
+    padding-inline: 0.06em;
+  }
+
+  /* The overlapping variant, for hero-scale headlines only. */
+  .u-script-xl {
+    font-size: 1.5em;
+    line-height: 0.6;
+    margin-inline: -0.06em;
+    transform: translateY(0.12em);
+  }
+
+  .u-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+  }
+
+  .u-meta {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ivory-dim);
+  }
+
+  /* Section marker. The homepage is laid out as a concert programme, so the
+     Roman numeral is describing a real running order, not decorating one. */
+  .u-movement {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .u-movement::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--color-gold-deep), transparent);
+  }
+
+  .u-rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-gold-deep),
+      transparent
+    );
+    border: 0;
+  }
+
+  /* --- Buttons ---------------------------------------------------------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      background-color 0.4s var(--ease-curtain),
+      color 0.4s var(--ease-curtain),
+      border-color 0.4s var(--ease-curtain),
+      transform 0.4s var(--ease-curtain);
+    text-decoration: none;
+    white-space: nowrap;
+    /* A button with long content (an email address, say) must never be the
+       reason the page scrolls sideways on a phone. */
+    max-width: 100%;
+  }
+
+  /* For buttons whose label genuinely cannot be shortened. */
+  .btn-wrap {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .btn:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+
+  /* Velvet is the buy action. It appears nowhere else. */
+  .btn-buy {
+    background: var(--color-velvet);
+    color: var(--color-ivory);
+    border-color: var(--color-velvet-lift);
+  }
+
+  .btn-buy:not(:disabled):hover {
+    background: var(--color-velvet-lift);
+  }
+
+  .btn-gold {
+    background: transparent;
+    color: var(--color-gold-lift);
+    border-color: var(--color-gold-deep);
+  }
+
+  .btn-gold:not(:disabled):hover {
+    background: var(--color-gold-lift);
+    color: var(--color-ink);
+    border-color: var(--color-gold-lift);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ivory);
+    border-color: color-mix(in srgb, var(--color-ivory) 25%, transparent);
+  }
+
+  .btn-ghost:not(:disabled):hover {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    border-color: var(--color-ivory);
+  }
+
+  .btn-solid {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    border-color: var(--color-ivory);
+  }
+
+  .btn-solid:not(:disabled):hover {
+    background: var(--color-gold-lift);
+    border-color: var(--color-gold-lift);
+  }
+
+  .btn-sm {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+  }
+
+  /* --- Surfaces --------------------------------------------------------- */
+
+  .surface {
+    background: var(--color-ink-raised);
+    border: 1px solid var(--color-ink-line);
+  }
+
+  .field {
+    width: 100%;
+    background: var(--color-ink);
+    border: 1px solid var(--color-ink-line);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 300;
+    padding: 0.8125rem 1rem;
+    border-radius: 2px;
+    transition: border-color 0.3s ease;
+  }
+
+  .field::placeholder {
+    color: var(--color-ivory-faint);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--color-gold);
+  }
+
+  .field-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ivory-dim);
+    margin-bottom: 0.5rem;
+  }
+
+
+  /* --- The gallery plane ------------------------------------------------ */
+
+  /*
+   * The drag surface is a real 3D scene. Perspective lives on the stage, the
+   * plane leans into the direction of travel from JS, and each tile lifts
+   * toward the viewer on hover. Keeping the lift in CSS means 130-odd tiles
+   * cost nothing per frame: only the one plane transform is scripted.
+   */
+  .gallery-stage {
+    perspective: 1600px;
+    perspective-origin: 50% 50%;
+  }
+
+  .gallery-plane {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .gallery-tile {
+    transform-style: preserve-3d;
+    transition:
+      box-shadow 0.5s var(--ease-curtain),
+      filter 0.5s var(--ease-curtain);
+    filter: brightness(0.82);
+  }
+
+  .gallery-tile img {
+    transition: transform 0.9s var(--ease-curtain);
+  }
+
+  .gallery-tile:hover {
+    z-index: 5;
+    filter: brightness(1.05);
+    box-shadow:
+      0 2rem 4rem -1rem color-mix(in srgb, var(--color-ink) 85%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--color-gold) 45%, transparent);
+  }
+
+  .gallery-tile:hover img {
+    transform: scale(1.08) translateZ(60px);
+  }
+
+  .gallery-tile:hover .scrim-soft {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-stage {
+      perspective: none;
+    }
+    .gallery-tile {
+      filter: none;
+    }
+    .gallery-tile:hover img {
+      transform: none;
+    }
+  }
+
+  /* --- The ivory intermission ------------------------------------------- */
+
+  .intermission {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+  }
+
+  .intermission .u-eyebrow {
+    color: var(--color-gold-deep);
+  }
+
+  .intermission .u-meta {
+    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  }
+
+  .intermission .u-script {
+    color: var(--color-velvet);
+  }
+
+  .intermission .btn-ghost {
+    color: var(--color-ink);
+    border-color: color-mix(in srgb, var(--color-ink) 25%, transparent);
+  }
+
+  .intermission .btn-ghost:hover {
+    background: var(--color-ink);
+    color: var(--color-ivory);
+    border-color: var(--color-ink);
+  }
+}
+
+@layer utilities {
+  /* Royal is atmosphere: it lives underneath imagery, never on top of type. */
+  .wash-royal {
+    background:
+      radial-gradient(
+        120% 90% at 50% 0%,
+        color-mix(in srgb, var(--color-royal) 55%, transparent),
+        transparent 70%
+      ),
+      var(--color-ink);
+  }
+
+  .wash-velvet {
+    background:
+      radial-gradient(
+        110% 80% at 80% 20%,
+        color-mix(in srgb, var(--color-velvet) 35%, transparent),
+        transparent 65%
+      ),
+      var(--color-ink);
+  }
+
+  /* Standard scrim for type sitting over a photograph. */
+  .scrim {
+    background: linear-gradient(
+      to top,
+      var(--color-ink) 2%,
+      color-mix(in srgb, var(--color-ink) 82%, transparent) 28%,
+      color-mix(in srgb, var(--color-royal-deep) 45%, transparent) 62%,
+      color-mix(in srgb, var(--color-ink) 55%, transparent) 100%
+    );
+  }
+
+  .scrim-soft {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-ink) 92%, transparent),
+      color-mix(in srgb, var(--color-ink) 20%, transparent) 55%,
+      transparent
+    );
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 3rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 4.5rem;
+    }
+  }
+
+  .shell-narrow {
+    width: 100%;
+    max-width: 58rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Ken Burns drift on hero stills, so a still photograph still breathes. */
+  .drift {
+    animation: drift 28s var(--ease-curtain) infinite alternate;
+  }
+
+  @keyframes drift {
+    from {
+      transform: scale(1.04) translate3d(0, 0, 0);
+    }
+    to {
+      transform: scale(1.14) translate3d(-1.5%, -1.5%, 0);
+    }
+  }
+
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.28;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+}
