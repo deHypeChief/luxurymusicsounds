@@ -71,10 +71,16 @@ export default function Footer() {
           </div>
 
           {/* Socials grouped by act, because each one runs its own accounts. */}
-          <div className="grid gap-10 sm:grid-cols-3">
+          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-3">
             {grouped.map((group) => (
               <div key={group.brand}>
-                <h3 className="u-eyebrow mb-4">{group.brand}</h3>
+                {/*
+                  An act name long enough to wrap needs its leading back: the
+                  base h1-h4 rule sets line-height to 0.95 for display
+                  headlines, which on a wrapped eyebrow puts the second line
+                  almost on top of the first link.
+                */}
+                <h3 className="u-eyebrow mb-5 leading-[1.7]">{group.brand}</h3>
                 <ul className="space-y-2">
                   {group.links.map((social) => (
                     <li key={social.platform}>
