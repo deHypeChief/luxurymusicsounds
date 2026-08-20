@@ -1,11 +1,13 @@
-import { ArrowRight, ArrowUpRight, Ticket } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, CalendarX, Ticket } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Dialog from '../components/Dialog'
+import EventCard from '../components/EventCard'
 import Reveal from '../components/Reveal'
+import { EmptyState } from '../components/States'
 import TicketDialog from '../components/TicketDialog'
 import { Movement, Script } from '../components/Typography'
-import { headlineEvent } from '../content/events'
+import { headlineEvent, publishedEvents } from '../content/events'
 import Chapters from '../components/home/Chapters'
 import Hero from '../components/home/Hero'
 import MediaMarquee from '../components/home/MediaMarquee'
@@ -26,6 +28,12 @@ export default function Home() {
   // Everything the page needs is in the repo, so there is nothing to load and
   // no loading state to design around.
   const headline = headlineEvent()
+  const upcoming = publishedEvents({ scope: 'upcoming' })
+
+  // Everything on sale, minus the headline that already has its own section.
+  const onSale = upcoming.filter(
+    (event) => event.ticketsOnSale && event.id !== headline?.id,
+  )
 
   // The special-event dialog opens once per browser session, after a short
   // pause. Interrupting someone the instant the page paints reads as a popup
@@ -54,13 +62,61 @@ export default function Home() {
 
       <HeadlineEvent event={headline} onBuy={setBuying} />
 
+      {/* ---- Tickets on sale ------------------------------------------- */}
+      <section className="border-t border-ink-line py-20 md:py-28">
+        <div className="shell">
+          <Reveal>
+            <Movement numeral="II" label="On sale now" />
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
+            <h2 className="u-display max-w-2xl text-[length:var(--text-display)]">
+              Tickets you can <Script xl>buy</Script> tonight
+            </h2>
+            <Link
+              to="/events"
+              className="group flex items-center gap-2 text-ivory-dim transition-colors hover:text-gold-lift"
+            >
+              <span className="u-meta">All events</span>
+              <ArrowRight
+                size={15}
+                strokeWidth={1.5}
+                className="transition-transform duration-500 group-hover:translate-x-1"
+              />
+            </Link>
+          </Reveal>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {onSale.length > 0 ? (
+              onSale.slice(0, 6).map((event, index) => (
+                <Reveal key={event.id} delay={index * 0.06} className="h-full">
+                  <EventCard event={event} onBuy={setBuying} priority={index < 3} />
+                </Reveal>
+              ))
+            ) : (
+              <EmptyState
+                className="sm:col-span-2 lg:col-span-3"
+                icon={CalendarX}
+                title="Nothing on sale right now"
+                description="The next season is being confirmed. Follow along and you will hear first."
+                action={
+                  <Link to="/events" className="btn btn-gold btn-sm">
+                    Browse past events
+                  </Link>
+                }
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
       <Chapters />
 
       {/* ---- The three acts --------------------------------------------- */}
       <section className="border-t border-ink-line wash-velvet py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="III" label="The house" />
+            <Movement numeral="IV" label="The house" />
           </Reveal>
 
           <Reveal delay={0.08}>
@@ -113,7 +169,7 @@ export default function Home() {
       <section className="border-t border-ink-line py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="IV" label="From the floor" />
+            <Movement numeral="V" label="From the floor" />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
@@ -149,7 +205,7 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <Movement numeral="V" label="The founder" />
+            <Movement numeral="VI" label="The founder" />
 
             <h2 className="u-display mt-8 text-[length:var(--text-display)]">
               It started with one <Script xl>violin</Script>
