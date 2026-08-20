@@ -103,7 +103,7 @@ export const EVENTS = [
     tagline: 'Golden hour, live strings, open sky',
     brand: 'Luxury Music Sounds',
     accent: 'gold',
-    status: 'published',
+    status: 'draft', // hidden for now; set back to 'published' to list it again
 
     startsAt: '2026-08-25T17:00:00+01:00',
     endsAt: '2026-08-25T21:00:00+01:00',
@@ -140,7 +140,7 @@ export const EVENTS = [
     tagline: 'One violin, fifty people, two sets',
     brand: 'Easystrings',
     accent: 'velvet',
-    status: 'published',
+    status: 'draft', // hidden for now; set back to 'published' to list it again
 
     startsAt: '2026-09-01T20:00:00+01:00',
     endsAt: '2026-09-01T23:00:00+01:00',
