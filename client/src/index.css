@@ -193,8 +193,7 @@
     color: var(--color-ivory-dim);
   }
 
-  /* Section marker. The homepage is laid out as a concert programme, so the
-     Roman numeral is describing a real running order, not decorating one. */
+  /* Section marker: the label, then a rule running off to the right edge. */
   .u-movement {
     display: flex;
     align-items: center;
@@ -247,11 +246,23 @@
     max-width: 100%;
   }
 
-  /* For buttons whose label genuinely cannot be shortened. */
+  /* For buttons whose label genuinely cannot be shortened. Flex would hand the
+     wrapped label only the space left over beside the icon, so the second line
+     centres against that leftover rather than against the button. Dropping to
+     inline-block puts the icon back in the text flow and every line centres on
+     the button itself. */
   .btn-wrap {
+    display: inline-block;
     white-space: normal;
     overflow-wrap: anywhere;
     text-align: center;
+    line-height: 1.7;
+  }
+
+  .btn-wrap > svg {
+    display: inline-block;
+    vertical-align: -0.2em;
+    margin-right: 0.625rem;
   }
 
   .btn:disabled {

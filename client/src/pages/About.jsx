@@ -13,6 +13,9 @@ export default function About() {
   useDocumentTitle('About')
 
   const contact = CONTACT
+  // Split the address so a narrow screen can break it at the @ rather than
+  // somewhere arbitrary inside the domain.
+  const [emailUser, emailDomain] = (contact?.email ?? '').split('@')
 
   return (
     <>
@@ -43,7 +46,7 @@ export default function About() {
       {/* What we do */}
       <section className="shell py-20 md:py-28">
         <Reveal>
-          <Movement numeral="I" label="What we do" />
+          <Movement label="What we do" />
         </Reveal>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-20">
@@ -76,7 +79,7 @@ export default function About() {
       <section className="intermission py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="II" label="The founder" />
+            <Movement label="The founder" />
           </Reveal>
 
           <div className="mt-12 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
@@ -116,7 +119,7 @@ export default function About() {
       {/* The three acts */}
       <section className="shell py-20 md:py-28">
         <Reveal>
-          <Movement numeral="III" label="The three acts" />
+          <Movement label="The three acts" />
         </Reveal>
 
         <Reveal delay={0.08}>
@@ -173,7 +176,7 @@ export default function About() {
       <section id="enquiries" className="wash-royal py-20 md:py-28">
         <div className="shell-narrow text-center">
           <Reveal>
-            <Movement numeral="IV" label="Enquiries" className="justify-center" />
+            <Movement label="Enquiries" className="justify-center" />
 
             <h2 className="u-display mt-10 text-[length:var(--text-display)]">
               Tell us about the <Script xl>room</Script>
@@ -187,8 +190,9 @@ export default function About() {
             <div className="mt-10 flex flex-wrap justify-center gap-3">
               {contact?.email ? (
                 <a href={`mailto:${contact.email}`} className="btn btn-solid btn-wrap">
-                  <Mail size={15} strokeWidth={1.5} className="shrink-0" />
-                  {contact.email}
+                  <Mail size={15} strokeWidth={1.5} />
+                  {emailUser}@<wbr />
+                  {emailDomain}
                 </a>
               ) : null}
 

@@ -48,7 +48,7 @@ export default function Chapters() {
     <section className="border-t border-ink-line py-20 md:py-28">
       <div className="shell">
         <Reveal>
-          <Movement numeral="III" label="What an evening looks like" />
+          <Movement label="What an evening looks like" />
         </Reveal>
       </div>
 

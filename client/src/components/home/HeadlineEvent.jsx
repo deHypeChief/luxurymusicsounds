@@ -51,7 +51,7 @@ export default function HeadlineEvent({ event, onBuy }) {
     <section id="programme" className="relative overflow-hidden wash-royal py-20 md:py-28">
       <div className="shell">
         <Reveal>
-          <Movement numeral="I" label="The headline event" />
+          <Movement label="The headline event" />
         </Reveal>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">

@@ -17,16 +17,16 @@ export function Eyebrow({ children, className = '' }) {
 }
 
 /**
- * Section marker for the home page, which is laid out as a concert programme.
- * The numeral describes a real running order, so it carries information rather
- * than decorating the heading.
+ * Section marker: a label with a rule running off to the right.
+ *
+ * These used to carry a roman numeral, as a concert programme would. Nothing
+ * on the site is actually read in order, so the numerals were claiming a
+ * running order that did not exist. The label stands on its own now.
  */
-export function Movement({ numeral, label, className = '' }) {
+export function Movement({ label, className = '' }) {
   return (
     <div className={`u-movement ${className}`}>
-      <span className="u-eyebrow shrink-0">
-        {numeral} &nbsp;·&nbsp; {label}
-      </span>
+      <span className="u-eyebrow shrink-0">{label}</span>
     </div>
   )
 }

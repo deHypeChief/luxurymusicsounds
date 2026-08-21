@@ -66,7 +66,7 @@ export default function Home() {
       <section className="border-t border-ink-line py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="II" label="On sale now" />
+            <Movement label="On sale now" />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
@@ -116,7 +116,7 @@ export default function Home() {
       <section className="border-t border-ink-line wash-velvet py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="IV" label="The house" />
+            <Movement label="The house" />
           </Reveal>
 
           <Reveal delay={0.08}>
@@ -169,7 +169,7 @@ export default function Home() {
       <section className="border-t border-ink-line py-20 md:py-28">
         <div className="shell">
           <Reveal>
-            <Movement numeral="V" label="From the floor" />
+            <Movement label="From the floor" />
           </Reveal>
 
           <Reveal delay={0.08} className="mt-10 flex flex-wrap items-end justify-between gap-6">
@@ -205,7 +205,7 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <Movement numeral="VI" label="The founder" />
+            <Movement label="The founder" />
 
             <h2 className="u-display mt-8 text-[length:var(--text-display)]">
               It started with one <Script xl>violin</Script>
